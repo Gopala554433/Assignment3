@@ -68,3 +68,60 @@ This function clusters a list of dataframes using k-means algorithm. The functio
 
 clustering(dfs_cluster)
 
+def fitting_predictions():
+    '''
+    This function takes in a dataset and performs curve fitting and linear regression to predict CO2 emissions from liquid fuel consumption (kt) based on Urban population growth in selected countries. It also generates a plot to show the best fitting function, confidence range, and plots to show the predicted values in 10 and 20 years. 
+    '''
+    
+
+    # Create a DataFrame with selected countries
+    data_frame_fit = pd.DataFrame({
+        "emission control": two_pop_fit,
+        "co2_con_capita": two_fo_fit})
+    data_frame_fit = data_frame_fit.dropna(axis=0)
+    
+    # Get the x and y data
+    xdata = data_frame_fit.iloc[:, 0].values
+    ydata = data_frame_fit.iloc[:, 1].values
+
+    # Define the function to fit
+    def func(x, a, b):
+        return a*x + b
+
+    # Fit the data
+    popt, pcov = curve_fit(func, xdata, ydata)
+
+    # Generate a plot showing the best fitting function
+    fig, ax = plt.subplots()
+    ax.plot(xdata, ydata, 'o', label='data')
+    ax.plot(xdata, func(xdata, *popt), 'r-', label='fit: a=%5.3f, b=%5.3f' % tuple(popt))
+    ax.set_xlabel('Xv')
+    ax.set_ylabel('Yv)')
+    ax.legend()
+    plt.show()
+
+    # Compute the confidence ranges
+    def err_ranges(popt, pcov):
+        perr = np.sqrt(np.diag(pcov))
+        lower = popt - perr
+        upper = popt + perr
+        return lower, upper
+
+    # Generate a plot showing the confidence range
+    
+ # Use the model for predictions
+    slope, intercept, r_value, p_value, std_err = linregress(xdata, ydata)
+
+    # Predict the values in 10 years
+    xpred = 10
+    ypred = slope * xpred + intercept
+    
+
+    # Predict the values in 20 years
+    xpred = 20
+    ypred = slope * xpred + intercept
+    
+
+
+fitting_predictions()
+
